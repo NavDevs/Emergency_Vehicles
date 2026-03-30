@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    
+    <!-- Traffic Light Logic for Intersection I1 (4 connections) -->
+    <tlLogic id="I1" type="static" programID="custom" offset="0">
+        <phase duration="25" state="GGrr"/>
+        <phase duration="5"  state="yyrr"/>
+        <phase duration="25" state="rrGG"/>
+        <phase duration="5"  state="rryy"/>
+    </tlLogic>
+    
+    <!-- Traffic Light Logic for Intersection I2 (4 connections) -->
+    <tlLogic id="I2" type="static" programID="custom" offset="0">
+        <phase duration="25" state="GGrr"/>
+        <phase duration="5"  state="yyrr"/>
+        <phase duration="25" state="rrGG"/>
+        <phase duration="5"  state="rryy"/>
+    </tlLogic>
+    
+    <!-- Traffic Light Logic for Intersection I3 (4 connections) -->
+    <tlLogic id="I3" type="static" programID="custom" offset="0">
+        <phase duration="25" state="GGrr"/>
+        <phase duration="5"  state="yyrr"/>
+        <phase duration="25" state="rrGG"/>
+        <phase duration="5"  state="rryy"/>
+    </tlLogic>
+    
+    <!-- Traffic Light Logic for Intersection I4 (4 connections) -->
+    <tlLogic id="I4" type="static" programID="custom" offset="0">
+        <phase duration="25" state="GGrr"/>
+        <phase duration="5"  state="yyrr"/>
+        <phase duration="25" state="rrGG"/>
+        <phase duration="5"  state="rryy"/>
+    </tlLogic>
+    
+</additional>

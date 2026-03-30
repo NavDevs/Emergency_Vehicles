@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+    
+    <!-- Input Files -->
+    <input>
+        <net-file value="network.net.xml"/>
+        <route-files value="routes.rou.xml"/>
+        <additional-files value="signals.add.xml"/>
+    </input>
+    
+    <!-- Time Settings -->
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+        <step-length value="0.1"/>
+    </time>
+    
+    <!-- Processing Settings -->
+    <processing>
+        <start value="true"/>
+    </processing>
+    
+    <!-- Report Settings -->
+    <report>
+        <no-warnings value="false"/>
+    </report>
+    
+</configuration>

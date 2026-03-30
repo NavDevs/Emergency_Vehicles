@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.qoder/
+results/*.csv
+results/*.png
+.env
+.ipynb_checkpoints/
