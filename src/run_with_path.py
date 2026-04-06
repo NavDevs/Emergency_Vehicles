@@ -10,7 +10,7 @@ import traci
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
-from preemption_controller import PreemptionController
+from ml_preemption import MLPreemptionController
 
 # Set SUMO_HOME explicitly
 os.environ['SUMO_HOME'] = r'C:\Program Files (x86)\Eclipse\Sumo'
@@ -163,7 +163,7 @@ def run_simulation():
             traci.vehicle.setColor(ev_id, (255, 0, 0))
             
             ev_tracker = EVTracker(ev_id)
-            preemption_controller = PreemptionController(ev_id)
+            preemption_controller = MLPreemptionController(ev_id, threshold=0.65)
             ev_tracker.preemption_controller = preemption_controller
             ev_added = True
             print(f"\n[{sim_time:.1f}s] EMERGENCY VEHICLE DEPLOYED!")
@@ -174,7 +174,12 @@ def run_simulation():
             ev_tracker.record(sim_time)
         
         if preemption_controller:
-            preemption_controller.check_and_preempt(sim_time)
+            # Get current EV state for ML
+            if ev_tracker.ev_id in traci.vehicle.getIDList():
+                ev_speed = traci.vehicle.getSpeed(ev_tracker.ev_id)
+                ev_pos = traci.vehicle.getPosition(ev_tracker.ev_id)
+                # Pass ML features: sim_time, distance, speed, queue_length, traffic_level
+                preemption_controller.check_and_preempt(sim_time, 80, ev_speed, 0, 1)
             preemption_controller.recover_signals(sim_time)
         
         # Check if EV reached destination
@@ -229,12 +234,12 @@ def generate_report(tracker):
     
     # Preemption report
     if tracker.preemption_controller:
-        preemption_summary = tracker.preemption_controller.get_preemption_summary()
-        print(f"\nPREEMPTION SUMMARY:")
+        preemption_summary = tracker.preemption_controller.get_summary()
+        print(f"\nPREEMPTION SUMMARY (ML-Based):")
         print(f"   Total Preemptions: {preemption_summary['total_preemptions']}")
-        print(f"   Signals Affected: {len(preemption_summary['signals_affected'])}")
-        if preemption_summary['signals_affected']:
-            print(f"   Signal List: {', '.join(preemption_summary['signals_affected'])}")
+        if preemption_summary['log']:
+            for entry in preemption_summary['log']:
+                print(f"   - {entry['signal']} at {entry['time']:.1f}s (confidence: {entry['confidence']:.1%}, method: {entry['method']})")
     
     # Save data
     os.makedirs("results", exist_ok=True)
