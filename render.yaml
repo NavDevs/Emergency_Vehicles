@@ -1,8 +1,10 @@
 services:
   - type: static
     name: ev-priority-website
+    env: node
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
+    rootDirectory: .
     pullRequestPreviewsEnabled: true
     routes:
       - type: rewrite
@@ -15,4 +17,4 @@ services:
       - path: /index.html
         name: Cache-Control
         value: no-cache
-    
+
