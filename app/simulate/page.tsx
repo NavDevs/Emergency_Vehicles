@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { ArrowRight, Brain, Activity, Shield, Zap, FileText } from 'lucide-react';
+import { ArrowRight, Brain, Activity, Shield, Zap, FileText, Menu, X } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 const RoadLayoutBuilder = dynamic(() => import('../../components/RoadLayoutBuilder'), {
@@ -48,6 +48,7 @@ export default function SimulatePage() {
   const [mounted, setMounted] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
   const [simulationResult, setSimulationResult] = useState<any>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -259,45 +260,67 @@ export default function SimulatePage() {
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center gap-3">
               <Logo size={40} />
-              <span className="font-display text-xl text-[#0F172A]">EV Priority</span>
+              <span className="font-display text-lg sm:text-xl text-[#0F172A]">EV Priority</span>
             </Link>
             
-            <div className="hidden md:flex gap-8">
-              <Link href="/" className="text-[#64748B] hover:text-[#0052FF] transition font-medium">Home</Link>
-              <Link href="/simulate" className="text-[#0052FF] font-medium">Simulate</Link>
-              <Link href="/results" className="text-[#64748B] hover:text-[#0052FF] transition font-medium">Results</Link>
+            <div className="hidden md:flex gap-6 sm:gap-8">
+              <Link href="/" className="text-[#64748B] hover:text-[#0052FF] transition font-medium text-sm sm:text-base">Home</Link>
+              <Link href="/simulate" className="text-[#0052FF] font-medium text-sm sm:text-base">Simulate</Link>
+              <Link href="/results" className="text-[#64748B] hover:text-[#0052FF] transition font-medium text-sm sm:text-base">Results</Link>
             </div>
             
-            <Link href="/results" className="btn-primary hidden md:block">
-              View Results
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/results" className="btn-primary hidden md:block px-4 sm:px-6 py-2 text-sm sm:text-base">
+                View Results
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
+          
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 border-t border-[#E2E8F0] pt-4">
+              <div className="flex flex-col gap-4">
+                <Link href="/" className="text-[#64748B] hover:text-[#0052FF] transition font-medium py-2">Home</Link>
+                <Link href="/simulate" className="text-[#0052FF] font-medium py-2">Simulate</Link>
+                <Link href="/results" className="text-[#64748B] hover:text-[#0052FF] transition font-medium py-2">Results</Link>
+                <Link href="/results" className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 mt-2">
+                  View Results
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
       {/* Main Content */}
-      <main className="pt-32 pb-20">
-        <div className="max-w-6xl mx-auto px-6">
+      <main className="pt-28 sm:pt-32 pb-16 sm:pb-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Badge Section */}
-          <div className="badge-section mb-8">
+          <div className="badge-section mb-6 sm:mb-8">
             <span className={`badge-dot ${isSimulating ? 'bg-[#ef4444]' : 'bg-[#22c55e]'} ${isSimulating ? 'animate-pulse' : ''}`}></span>
-            <span className="font-mono text-xs uppercase tracking-[0.15em] text-[#0052FF]">
+            <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.15em] text-[#0052FF]">
               {isSimulating ? 'LIVE SIMULATION RUNNING' : 'ML-Powered Simulation'}
             </span>
           </div>
           
           {/* Hero Title */}
-          <h1 className="font-display text-5xl md:text-6xl text-[#0F172A] leading-tight tracking-tight mb-6">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#0F172A] leading-tight tracking-tight mb-4 sm:mb-6">
             Road Layout{" "}
             <span className="gradient-text">Simulator</span>
           </h1>
           
           {/* Subtitle */}
-          <p className="text-lg text-[#64748B] max-w-2xl mb-12 leading-relaxed">
+          <p className="text-base sm:text-lg text-[#64748B] max-w-2xl mb-8 sm:mb-12 leading-relaxed">
             Choose from 17 pre-built road layouts. Set traffic conditions and run real-time ML simulations to see how emergency vehicles get priority at intersections.
           </p>
           
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="lg:col-span-2">
               <RoadLayoutBuilder 
                 onRunSimulation={handleRunSimulation} 
@@ -306,34 +329,34 @@ export default function SimulatePage() {
             </div>
             
             {/* Results Panel */}
-            <div className="card h-fit sticky top-24">
-              <h3 className="font-display text-xl text-[#0F172A] mb-6 flex items-center gap-2">
+            <div className="card h-fit sticky top-20 sm:top-24">
+              <h3 className="font-display text-lg sm:text-xl text-[#0F172A] mb-4 sm:mb-6 flex items-center gap-2">
                 <Brain className="w-5 h-5 text-[#0052FF]" />
                 Simulation Results
               </h3>
               
               {simulationResult ? (
-                <div className="space-y-6">
-                  <div className="bg-gradient-to-r from-[#F1F5F9] to-white rounded-xl p-6 text-center border border-[#0052FF]/20">
-                    <div className="text-4xl font-bold gradient-text mb-2">{simulationResult.travelTime}s</div>
-                    <div className="text-sm text-[#64748B]">ML Travel Time</div>
-                    <div className="text-sm text-[#22c55e] font-medium mt-1">+{simulationResult.improvement}% faster</div>
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="bg-gradient-to-r from-[#F1F5F9] to-white rounded-xl p-4 sm:p-6 text-center border border-[#0052FF]/20">
+                    <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">{simulationResult.travelTime}s</div>
+                    <div className="text-xs sm:text-sm text-[#64748B]">ML Travel Time</div>
+                    <div className="text-xs sm:text-sm text-[#22c55e] font-medium mt-1">+{simulationResult.improvement}% faster</div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="card text-center">
-                      <div className="text-2xl font-bold text-[#0F172A]">{simulationResult.intersectionsCount}</div>
-                      <div className="text-xs text-[#64748B] mt-1">Intersections</div>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    <div className="card text-center py-3 sm:py-4">
+                      <div className="text-xl sm:text-2xl font-bold text-[#0F172A]">{simulationResult.intersectionsCount}</div>
+                      <div className="text-[10px] sm:text-xs text-[#64748B] mt-1">Intersections</div>
                     </div>
-                    <div className="card text-center">
-                      <div className="text-2xl font-bold text-[#0F172A]">{simulationResult.preemptions}</div>
-                      <div className="text-xs text-[#64748B] mt-1">Preemptions</div>
+                    <div className="card text-center py-3 sm:py-4">
+                      <div className="text-xl sm:text-2xl font-bold text-[#0F172A]">{simulationResult.preemptions}</div>
+                      <div className="text-[10px] sm:text-xs text-[#64748B] mt-1">Preemptions</div>
                     </div>
-                    <div className="card text-center">
-                      <div className="text-2xl font-bold text-[#0F172A]">{simulationResult.confidence}%</div>
-                      <div className="text-xs text-[#64748B] mt-1">ML Confidence</div>
+                    <div className="card text-center py-3 sm:py-4">
+                      <div className="text-xl sm:text-2xl font-bold text-[#0F172A]">{simulationResult.confidence}%</div>
+                      <div className="text-[10px] sm:text-xs text-[#64748B] mt-1">ML Confidence</div>
                     </div>
-                    <div className="card text-center">
+                    <div className="card text-center py-3 sm:py-4">
                       <div className="text-2xl font-bold text-[#64748B]">{simulationResult.originalTime}s</div>
                       <div className="text-xs text-[#64748B] mt-1">Without ML</div>
                     </div>

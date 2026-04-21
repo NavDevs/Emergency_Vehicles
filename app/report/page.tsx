@@ -16,7 +16,9 @@ import {
   CheckCircle,
   AlertCircle,
   FileText,
-  Share2
+  Share2,
+  Menu,
+  X
 } from 'lucide-react'
 import Logo from '@/components/Logo'
 
@@ -172,6 +174,7 @@ function ReportPageContent() {
   const [report, setReport] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const printRef = useRef<HTMLDivElement>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     // Get simulation data from URL params or generate sample
@@ -267,37 +270,72 @@ function ReportPageContent() {
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 no-print">
-        <div className="max-w-6xl mx-auto px-6 py-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center gap-3">
               <Logo size={40} />
-              <span className="font-display text-xl text-gray-900">EV Priority</span>
+              <span className="font-display text-lg sm:text-xl text-gray-900">EV Priority</span>
             </Link>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition text-sm"
               >
                 <Share2 className="w-4 h-4" />
                 Share
               </button>
               <button
                 onClick={handleDownloadPDF}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition text-sm"
               >
                 <Download className="w-4 h-4" />
                 PDF
               </button>
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm"
               >
                 <Printer className="w-4 h-4" />
                 Print
               </button>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="sm:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
+          
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="sm:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => { handleShare(); setMobileMenuOpen(false); }}
+                  className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                >
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </button>
+                <button
+                  onClick={() => { handleDownloadPDF(); setMobileMenuOpen(false); }}
+                  className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                >
+                  <Download className="w-4 h-4" />
+                  PDF
+                </button>
+                <button
+                  onClick={() => { handlePrint(); setMobileMenuOpen(false); }}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                >
+                  <Printer className="w-4 h-4" />
+                  Print
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 

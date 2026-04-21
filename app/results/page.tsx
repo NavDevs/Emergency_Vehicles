@@ -20,7 +20,9 @@ import {
   TrendingUp,
   Wind,
   Users,
-  AlertTriangle
+  AlertTriangle,
+  Menu,
+  X
 } from 'lucide-react'
 import Logo from '@/components/Logo'
 
@@ -340,14 +342,13 @@ function HistoryCard({
 }
 
 export default function ResultsPage() {
-  const [mounted, setMounted] = useState(false)
   const [simulations, setSimulations] = useState<SimulationResult[]>([])
   const [selectedSim, setSelectedSim] = useState<SimulationResult | null>(null)
-  const [showHistory, setShowHistory] = useState(true)
+  const [expandedSim, setExpandedSim] = useState<string | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [exportFormat, setExportFormat] = useState<'json' | 'csv'>('json')
 
   useEffect(() => {
-    setMounted(true)
     const stored = getStoredSimulations()
     setSimulations(stored)
     if (stored.length > 0) {
@@ -451,29 +452,55 @@ export default function ResultsPage() {
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-[#E2E8F0] no-print">
-        <div className="max-w-6xl mx-auto px-6 py-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center gap-3">
               <Logo size={40} />
-              <span className="font-display text-xl text-[#0F172A]">EV Priority</span>
+              <span className="font-display text-lg sm:text-xl text-[#0F172A]">EV Priority</span>
             </Link>
             
-            <div className="hidden md:flex gap-8">
-              <Link href="/" className="text-[#64748B] hover:text-[#0052FF] transition font-medium">Home</Link>
-              <Link href="/simulate" className="text-[#64748B] hover:text-[#0052FF] transition font-medium">Simulate</Link>
-              <Link href="/results" className="text-[#0052FF] font-medium">Results</Link>
+            <div className="hidden md:flex gap-6 sm:gap-8">
+              <Link href="/" className="text-[#64748B] hover:text-[#0052FF] transition font-medium text-sm sm:text-base">Home</Link>
+              <Link href="/simulate" className="text-[#64748B] hover:text-[#0052FF] transition font-medium text-sm sm:text-base">Simulate</Link>
+              <Link href="/results" className="text-[#0052FF] font-medium text-sm sm:text-base">Results</Link>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <Link href="/simulate" className="btn-primary hidden md:block px-4 sm:px-6 py-2 text-sm sm:text-base">
+                New Simulation
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
+          
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 border-t border-[#E2E8F0] pt-4">
+              <div className="flex flex-col gap-4">
+                <Link href="/" className="text-[#64748B] hover:text-[#0052FF] transition font-medium py-2">Home</Link>
+                <Link href="/simulate" className="text-[#64748B] hover:text-[#0052FF] transition font-medium py-2">Simulate</Link>
+                <Link href="/results" className="text-[#0052FF] font-medium py-2">Results</Link>
+                <Link href="/simulate" className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 mt-2">
+                  New Simulation
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 pt-24 pb-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 sm:pt-24 pb-12 sm:pb-16">
         {/* Header */}
-        <div className="flex justify-between items-start mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6 sm:mb-8">
           <div>
-            <div className="badge-section mb-4">
+            <div className="badge-section mb-3 sm:mb-4">
               <span className="badge-dot animate-pulse"></span>
-              <span className="font-mono text-xs uppercase tracking-[0.15em] text-[#0052FF]">Performance Analytics</span>
+              <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.15em] text-[#0052FF]">Performance Analytics</span>
             </div>
             
             <h1 className="font-display text-4xl md:text-5xl text-[#0F172A] mb-2">
