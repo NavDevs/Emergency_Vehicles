@@ -348,6 +348,7 @@ export default function ResultsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [exportFormat, setExportFormat] = useState<'json' | 'csv'>('json')
   const [mounted, setMounted] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
 
   useEffect(() => {
     setMounted(true)
