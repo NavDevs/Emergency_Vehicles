@@ -347,6 +347,11 @@ export default function ResultsPage() {
   const [expandedSim, setExpandedSim] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [exportFormat, setExportFormat] = useState<'json' | 'csv'>('json')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const stored = getStoredSimulations()
